@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="output" default="screen"/> <!-- screen/log -->
+
+  <node pkg="rosbag" type="record" name="recorder" args="--all" />
+
+  <!-- System -->
+  <include file="$(find eol_tester_btpe)/launch/live.launch">
+    <arg name="output" value="$(arg output)" />
+    <arg name="test" value="true" />
+    <arg name="recording" value="true" />
+    <arg name="platform" value="$(arg platform)" />
+  </include>
+
+  <!-- TODO: wait for test node to finish, kill the recorder, playback the bag in plotjuggler -->
+
+</launch>

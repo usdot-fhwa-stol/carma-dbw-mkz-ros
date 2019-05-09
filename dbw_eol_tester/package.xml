@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>dbw_eol_tester</name>
+  <version>0.1.0</version>
+  <description>
+    DBW MKZ Emulator and Tester launch files and scripts
+  </description>
+
+  <license>Proprietary</license>
+  <author email="emyllyoja@dataspeedinc.com">Eric Myllyoja</author>
+  <maintainer email="emyllyoja@dataspeedinc.com">Eric Myllyoja</maintainer>
+  <url type="website">http://dataspeedinc.com</url>
+  <url type="repository">https://bitbucket.org/dataspeedinc/drive_by_wire</url>
+  <url type="bugtracker">https://bitbucket.org/dataspeedinc/drive_by_wire/issues</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>roscpp</depend>
+  <depend>roslib</depend>
+  <depend>dbw_mkz_ros</depend>
+  <depend>dataspeed_rostest</depend>
+  <depend>gtest</depend>
+
+  <exec_depend>roslaunch</exec_depend>
+  <exec_depend>rosbag</exec_depend>
+  <exec_depend>dataspeed_boot_usb</exec_depend>
+  <exec_depend>sainsmart_relay_usb</exec_depend>
+
+  <test_depend>roslaunch</test_depend>
+</package>

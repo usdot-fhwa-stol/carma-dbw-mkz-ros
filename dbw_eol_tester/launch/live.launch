@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="output"       default="log"      doc="output to screen or log"/>
+  <arg name="recording"    default="false"    doc="Let the tester know rosbag is listening to topics as well, so num subs == 2 instead of 1"/>
+  <arg name="test"         default="true"     doc="execute test script?"/>
+
+  <!-- CAN Interface -->
+  <include file="$(find dbw_mkz_can)/launch/dbw.launch">
+  </include>
+
+  <!-- Test script -->
+  <node if="$(arg test)" pkg="dbw_eol_tester" type="dbw_eol_tester" name="dbw_eol_tester" output="screen" required="true" launch-prefix="gdb -ex run --args">
+    <param name="recording"    value="$(arg recording)" />
+  </node>
+
+</launch>

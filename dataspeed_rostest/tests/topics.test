@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="output"    default="log"   doc="output to screen or log"/>
+  <node pkg="dataspeed_rostest" type="dataspeed_rostest_topics" name="topics" output="$(arg output)" required="true"/>
+  <test pkg="dataspeed_rostest" type="dataspeed_rostest_test_wait_for_topics" test-name="wait_for_topics"/>
+</launch>
