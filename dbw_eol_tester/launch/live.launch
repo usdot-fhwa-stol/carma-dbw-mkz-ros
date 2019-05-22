@@ -9,7 +9,7 @@
   </include>
 
   <!-- Test script -->
-  <node if="$(arg test)" pkg="dbw_eol_tester" type="dbw_eol_tester" name="dbw_eol_tester" output="screen" required="true" launch-prefix="gdb -ex run --args">
+  <node if="$(arg test)" pkg="dbw_eol_tester" type="dbw_eol_tester" name="dbw_eol_tester" output="screen" required="true">
     <param name="recording"    value="$(arg recording)" />
   </node>
 

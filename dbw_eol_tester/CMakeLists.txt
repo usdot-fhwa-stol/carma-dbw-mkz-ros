@@ -4,6 +4,7 @@ project(dbw_eol_tester)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   roslib
+  dbw_mkz_can
   dataspeed_rostest
 )
 
@@ -15,7 +16,7 @@ elseif ("${CMAKE_CXX_STANDARD_COMPUTED_DEFAULT}" STREQUAL "98")
   set(CMAKE_CXX_STANDARD 11)
 endif()
 
-add_compile_options(${TARGET_NAME} -Wall -Wextra -Werror) #-pedantic fails in rosconsole https://github.com/ros/rosconsole/issues/9
+add_compile_options(${TARGET_NAME} -Wall -Wextra -Werror -Wno-reorder -Wno-unused-function) #-pedantic fails in rosconsole https://github.com/ros/rosconsole/issues/9
 
 # Find gtest and build into target from source
 find_package(GTest)
@@ -70,10 +71,6 @@ copy_and_prune_files("${RELEASED_HEX_FILES}" firmware)
 install(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-)
-install(DIRECTORY scripts
-        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-        USE_SOURCE_PERMISSIONS
 )
 install(DIRECTORY firmware launch
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}

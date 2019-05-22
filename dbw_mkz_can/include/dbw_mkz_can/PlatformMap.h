@@ -86,6 +86,9 @@ public:
   ModuleVersion findModule(const PlatformVersion &x) const {
     return findModule(x.p, x.m);
   }
+  PlatformVersion findPlatform(Platform p, Module m) const {
+    return PlatformVersion(p, m, findModule(p, m));
+  }
   PlatformVersion findPlatform(Module m) const {
     for (Map::const_iterator it_p = map.begin(); it_p != map.end(); it_p++) {
       const MapM &map_m = it_p->second;
@@ -98,6 +101,26 @@ public:
   }
   PlatformVersion findPlatform(const PlatformVersion &x) const {
     return findPlatform(x.m);
+  }
+  std::vector<Platform> listPlatforms() const {
+    std::vector<Platform> output;
+    for (auto it_p = map.begin(); it_p != map.end(); it_p++) {
+      output.push_back(it_p->first);
+    }
+    return output;
+  }
+  std::vector<Module> listModules(Platform p) const {
+    std::vector<Module> output;
+    MapP::const_iterator it_p = map.find(p);
+    if (it_p != map.end()) {
+      const MapM &map_m = it_p->second;
+      for (auto it_m = map_m.begin(); it_m != map_m.end(); it_m++) {
+        if (it_m->second.valid()) {
+          output.push_back(it_m->first);
+        }
+      }
+    }
+    return output;    
   }
 private:
   typedef std::map<Module, ModuleVersion> MapM;

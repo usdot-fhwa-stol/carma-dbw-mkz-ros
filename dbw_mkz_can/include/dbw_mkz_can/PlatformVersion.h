@@ -90,6 +90,7 @@ public:
   PlatformVersion() : p((Platform)0), m((Module)0) {};
   PlatformVersion(Platform _p, Module _m, ModuleVersion _v) : p(_p), m(_m), v(_v) {};
   PlatformVersion(Platform _p, Module _m, uint16_t major, uint16_t minor, uint16_t build) : p(_p), m(_m), v(ModuleVersion(major, minor, build)) {};
+  bool valid() { return v.valid(); }
   bool operator< (const PlatformVersion& other) const { return (this->p == other.p) && (this->m == other.m) && (this->v <  other.v); }
   bool operator> (const PlatformVersion& other) const { return (this->p == other.p) && (this->m == other.m) && (this->v >  other.v); }
   bool operator<=(const PlatformVersion& other) const { return (this->p == other.p) && (this->m == other.m) && (this->v <= other.v); }
