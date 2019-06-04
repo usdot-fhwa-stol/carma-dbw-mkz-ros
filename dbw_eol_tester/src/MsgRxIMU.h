@@ -15,25 +15,18 @@ public:
    * Version
    */
   bool validData() const {
-    return valid_orientation_w
-      && valid_orientation_x
-      && valid_orientation_y
-      && valid_orientation_z
-      && valid_angular_velocity_x
-      && valid_angular_velocity_y
+    return valid_angular_velocity_x
+      //&& valid_angular_velocity_y
       && valid_angular_velocity_z
       && valid_linear_acceleration_x
       && valid_linear_acceleration_y
-      && valid_linear_acceleration_z;
+      && valid_linear_acceleration_z
+      ;
   }
 
 protected:
-  bool valid_orientation_w = false;
-  bool valid_orientation_x = false;
-  bool valid_orientation_y = false;
-  bool valid_orientation_z = false;
   bool valid_angular_velocity_x = false;
-  bool valid_angular_velocity_y = false;
+  //bool valid_angular_velocity_y = false;
   bool valid_angular_velocity_z = false;
   bool valid_linear_acceleration_x = false;
   bool valid_linear_acceleration_y = false;
@@ -43,16 +36,12 @@ protected:
     msg_ = *msg;
     stamp_ = ros::Time::now();
 
-    valid_orientation_w = valid_orientation_w || (msg->orientation.w != 0);
-    valid_orientation_x = valid_orientation_x || (msg->orientation.x != 0);
-    valid_orientation_y = valid_orientation_y || (msg->orientation.y != 0);
-    valid_orientation_z = valid_orientation_z || (msg->orientation.z != 0);
     valid_angular_velocity_x = valid_angular_velocity_x || (msg->angular_velocity.x != 0);
-    valid_angular_velocity_y = valid_angular_velocity_y || (msg->angular_velocity.y != 0);
+    //valid_angular_velocity_y = valid_angular_velocity_y || (msg->angular_velocity.y != 0);
     valid_angular_velocity_z = valid_angular_velocity_z || (msg->angular_velocity.z != 0);
     valid_linear_acceleration_x = valid_linear_acceleration_x || (msg->linear_acceleration.x != 0);
     valid_linear_acceleration_y = valid_linear_acceleration_y || (msg->linear_acceleration.y != 0);
-    valid_linear_acceleration_y = valid_linear_acceleration_y || (msg->linear_acceleration.z != 0);
+    valid_linear_acceleration_z = valid_linear_acceleration_z || (msg->linear_acceleration.z != 0);
   }
 };
 

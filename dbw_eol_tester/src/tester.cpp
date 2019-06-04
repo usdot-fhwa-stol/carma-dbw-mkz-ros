@@ -22,22 +22,26 @@
 #include <dataspeed_rostest/WaitForTopics.h>
 
 // ROS Messages
-#include <std_msgs/String.h>
-#include <std_msgs/Empty.h>
-#include <dbw_mkz_msgs/BrakeReport.h>
-#include <dbw_mkz_msgs/ThrottleReport.h>
-#include <dbw_mkz_msgs/SteeringReport.h>
-#include <dbw_mkz_msgs/BrakeInfoReport.h>
-#include <dbw_mkz_msgs/ThrottleInfoReport.h>
-#include <dbw_mkz_msgs/GearReport.h>
-#include <dbw_mkz_msgs/TirePressureReport.h>
-#include <dbw_mkz_msgs/ParkingBrake.h>
-#include <dbw_mkz_msgs/Gear.h>
 #include <dbw_mkz_msgs/BrakeCmd.h>
+#include <dbw_mkz_msgs/ThrottleCmd.h>
+#include <dbw_mkz_msgs/SteeringCmd.h>
+#include <dbw_mkz_msgs/GearCmd.h>
+#include <dbw_mkz_msgs/BrakeInfoReport.h>
+#include <dbw_mkz_msgs/BrakeReport.h>
+#include <dbw_mkz_msgs/Gear.h>
+#include <dbw_mkz_msgs/GearReport.h>
+#include <dbw_mkz_msgs/ParkingBrake.h>
+#include <dbw_mkz_msgs/SteeringReport.h>
+#include <dbw_mkz_msgs/SurroundReport.h>
+#include <dbw_mkz_msgs/ThrottleInfoReport.h>
+#include <dbw_mkz_msgs/ThrottleReport.h>
+#include <dbw_mkz_msgs/TirePressureReport.h>
+#include <geometry_msgs/TwistStamped.h>
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/NavSatFix.h>
-#include <geometry_msgs/TwistStamped.h>
 #include <sensor_msgs/TimeReference.h>
+#include <std_msgs/Empty.h>
+#include <std_msgs/String.h>
 
 // rostest Helper classes
 #include <dataspeed_rostest/MsgRx.h>
@@ -67,24 +71,30 @@ std::shared_ptr<MsgRx<std_msgs::String> > sub_vin;
 std::shared_ptr<MsgRx<dbw_mkz_msgs::BrakeReport> > sub_brake_report;
 std::shared_ptr<MsgRx<dbw_mkz_msgs::ThrottleReport> > sub_throttle_report;
 std::shared_ptr<MsgRx<dbw_mkz_msgs::SteeringReport> > sub_steering_report;
-std::shared_ptr<MsgRx<dbw_mkz_msgs::SurroundReport> > sub_surround_report;
+std::shared_ptr<MsgRx<dbw_mkz_msgs::SurroundReport> > sub_surround;
 std::shared_ptr<MsgRx<dbw_mkz_msgs::BrakeInfoReport> > sub_brake_info_report;
 std::shared_ptr<MsgRx<dbw_mkz_msgs::ThrottleInfoReport> > sub_throttle_info_report;
 std::shared_ptr<MsgRx<dbw_mkz_msgs::GearReport> > sub_gear_report;
 std::shared_ptr<MsgRx<dbw_mkz_msgs::TirePressureReport> > sub_tire;
+std::shared_ptr<MsgRx<sensor_msgs::NavSatFix> > sub_gps_fix;
+std::shared_ptr<MsgRx<geometry_msgs::TwistStamped> > sub_gps_vel;
+std::shared_ptr<MsgRx<sensor_msgs::TimeReference> > sub_gps_time;
 
 std::shared_ptr<MsgTx<std_msgs::Empty> > pub_dbw_enable;
 
 std::shared_ptr<MsgTx<dbw_mkz_msgs::BrakeCmd> > pub_brake_cmd;
+std::shared_ptr<MsgTx<dbw_mkz_msgs::ThrottleCmd> > pub_throttle_cmd;
+std::shared_ptr<MsgTx<dbw_mkz_msgs::SteeringCmd> > pub_steer_cmd;
+std::shared_ptr<MsgTx<dbw_mkz_msgs::GearCmd> > pub_gear_cmd;
 
 dbw_mkz_can::PlatformMap FIRMWARE_LATEST({
-  //{dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_BPEC,  dbw_mkz_can::ModuleVersion(2,1,2))},
-  {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_BPEC,  dbw_mkz_can::ModuleVersion(2,1,0))},
-  //{dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_TPEC,  dbw_mkz_can::ModuleVersion(2,1,2))},
-  {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_TPEC,  dbw_mkz_can::ModuleVersion(2,1,0))},
-  //{dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_STEER, dbw_mkz_can::ModuleVersion(2,1,2))},
-  {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_STEER, dbw_mkz_can::ModuleVersion(2,1,99))},
-  //{dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_SHIFT, dbw_mkz_can::ModuleVersion(2,1,2))},
+  {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_BPEC,  dbw_mkz_can::ModuleVersion(2,1,2))},
+  //{dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_BPEC,  dbw_mkz_can::ModuleVersion(2,1,0))},
+  {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_TPEC,  dbw_mkz_can::ModuleVersion(2,1,2))},
+  //{dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_TPEC,  dbw_mkz_can::ModuleVersion(2,1,0))},
+  {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_STEER, dbw_mkz_can::ModuleVersion(2,1,1))},
+  //{dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_STEER, dbw_mkz_can::ModuleVersion(2,1,99))},
+  {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_SHIFT, dbw_mkz_can::ModuleVersion(2,1,2))},
   {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_CD4, dbw_mkz_can::M_SHIFT, dbw_mkz_can::ModuleVersion(2,1,0))},
   {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_P5,  dbw_mkz_can::M_TPEC,  dbw_mkz_can::ModuleVersion(1,0,2))},
   {dbw_mkz_can::PlatformVersion(dbw_mkz_can::P_FORD_P5,  dbw_mkz_can::M_STEER, dbw_mkz_can::ModuleVersion(1,0,2))},
@@ -107,7 +117,7 @@ dbw_mkz_can::PlatformMap FIRMWARE_LATEST({
 class System : public testing::Test {
   // Cancel all tests on critical error
   virtual void SetUp() {
-    ASSERT_FALSE(g_critical_fail);
+    ASSERT_FALSE(g_critical_fail) << "A critical failure has occurred in a previous system test.";
   }
   // Any error in a system test is critical!
   virtual void TearDown() {
@@ -119,7 +129,7 @@ class System : public testing::Test {
 class BasicTest : public testing::Test {
   // Cancel all tests on critical error
   virtual void SetUp() {
-    ASSERT_FALSE(g_critical_fail);
+    ASSERT_FALSE(g_critical_fail) << "A critical failure has occurred in a previous system test.";
   }
 };
 class CAN_DBW : public BasicTest { };
@@ -129,8 +139,8 @@ class CAN_PSCM : public BasicTest { };
 class Actuate : public testing::Test {
   // Cancel all tests on critical error
   virtual void SetUp() {
-    ASSERT_FALSE(g_critical_fail);
-    ASSERT_FALSE(g_actuate_fail);
+    ASSERT_FALSE(g_critical_fail) << "A critical failure has occurred in a previous system test.";
+    ASSERT_FALSE(g_actuate_fail) << "A critical failure has occurred in a previous actuation test.";
   }
   // Any error in an actuation test should prevent future tests.
   virtual void TearDown() {
@@ -148,7 +158,7 @@ void setupTopics(ros::NodeHandle nh) {
   sub_vin = std::make_shared<MsgRx<std_msgs::String> > (nh, "/vehicle/vin", 10.0);
   sub_brake_report = std::make_shared<MsgRx<dbw_mkz_msgs::BrakeReport> > (nh, "/vehicle/brake_report", 10.0);
   sub_throttle_report = std::make_shared<MsgRx<dbw_mkz_msgs::ThrottleReport> > (nh, "/vehicle/throttle_report", 10.0);
-  sub_surround_report = std::make_shared<MsgRx<dbw_mkz_msgs::Surround> > (nh, "/vehicle/surround_report", 10.0);
+  sub_surround = std::make_shared<MsgRx<dbw_mkz_msgs::SurroundReport> > (nh, "/vehicle/surround_report", 10.0);
   sub_steering_report = std::make_shared<MsgRx<dbw_mkz_msgs::SteeringReport> > (nh, "/vehicle/steering_report", 10.0);
   sub_brake_info_report = std::make_shared<MsgRx<dbw_mkz_msgs::BrakeInfoReport> > (nh, "/vehicle/brake_info_report", 10.0);
   sub_throttle_info_report = std::make_shared<MsgRx<dbw_mkz_msgs::ThrottleInfoReport> > (nh, "/vehicle/throttle_info_report", 10.0);
@@ -161,12 +171,17 @@ void setupTopics(ros::NodeHandle nh) {
   pub_dbw_enable = std::make_shared<MsgTx<std_msgs::Empty> > (nh, "/vehicle/enable");
 
   pub_brake_cmd = std::make_shared<MsgTx<dbw_mkz_msgs::BrakeCmd> > (nh, "/vehicle/brake_cmd");
-
+  pub_throttle_cmd = std::make_shared<MsgTx<dbw_mkz_msgs::ThrottleCmd> > (nh, "/vehicle/throttle_cmd");
+  pub_steer_cmd = std::make_shared<MsgTx<dbw_mkz_msgs::SteeringCmd> > (nh, "/vehicle/steering_cmd");
+  pub_gear_cmd = std::make_shared<MsgTx<dbw_mkz_msgs::GearCmd> > (nh, "/vehicle/gear_cmd");
 }
 
 // Transmit periodic command messages
 void timerCallback(__attribute__((unused)) const ros::TimerEvent& event) {
   pub_brake_cmd->send();
+  pub_steer_cmd->send();
+  pub_throttle_cmd->send();
+  pub_gear_cmd->send();
 }
 
 // Tests
@@ -178,10 +193,10 @@ TEST_F(System, Params)
   dbw_mkz_can::dispatchAssertSizes();
 }
 
-TEST_F(CAN_DBW, FirmwareVersion)
+TEST_F(System, CAN)
 {
   // Wait for subscribers to finish setup.
-  EXPECT_TRUE(waitFor<MsgRxb>(subReady, sub_can, 5.0)) << "Could not connect to CAN topic.";
+  EXPECT_TRUE(waitFor<MsgRxb>(subReady, sub_can, 5.0)) << "Could not connect to CAN topic. Is the DBW system powered on and connected?";
   // Which subscriber isn't ready?
   ASSERT_GE(sub_can->getNumPublishers(), 1) << "CAN topic has no publishers.";
 
@@ -189,6 +204,10 @@ TEST_F(CAN_DBW, FirmwareVersion)
   EXPECT_TRUE(waitFor<MsgRxb>(dataReady, sub_can, 5.0)) << "Timeout expired waiting for CAN from the vehicle.";
   ASSERT_TRUE(sub_can->fresh()) << "Did not receive a CAN message from the vehicle.";
 
+}
+
+TEST_F(CAN_DBW, FirmwareVersion)
+{
   // Wait for all the version messages to be sent.
   ros::Duration(5.0).sleep();
 
@@ -203,28 +222,62 @@ TEST_F(CAN_DBW, FirmwareVersion)
 
   for (size_t i = 0; i < versionPlatforms.size(); i++) {
     dbw_mkz_can::Platform currentPlatform = versionPlatforms[i];
+    bool ignoreSHIFT = (currentPlatform == dbw_mkz_can::P_FORD_CD4);
+
     std::vector<dbw_mkz_can::Module> knownModules = FIRMWARE_LATEST.listModules(currentPlatform);
     std::vector<dbw_mkz_can::Module> versionModules = sub_can->getVersions().listModules(currentPlatform);
 
-    ASSERT_EQ(knownModules.size(), versionModules.size()) << "ERROR: Expected " << knownModules.size() << " modules, found " << versionModules.size();
+    if (ignoreSHIFT) {
+      // It's fine if knownModules == versionModules OR there is one less module present.
+      if (versionModules.size() != knownModules.size() - 1) {
+        ASSERT_EQ(knownModules.size(), versionModules.size()) << "ERROR: Expected " << knownModules.size() << " modules, found " << versionModules.size();
+      }
+    } else {
+      ASSERT_EQ(knownModules.size(), versionModules.size()) << "ERROR: Expected " << knownModules.size() << " modules, found " << versionModules.size();
+    }
 
     for (size_t j = 0; j < knownModules.size(); j++) {
       dbw_mkz_can::Module currentModule = knownModules[j]; 
       
-      EXPECT_TRUE(sub_can->getVersions().findModule(currentPlatform, currentModule).valid()) << "ERROR: Module " << moduleToString(currentModule)
-        << "(" << currentModule << ") has no valid version.";
+      bool isSHIFT = (currentModule == dbw_mkz_can::M_SHIFT);
 
-      // Fetch the platform version from CAN.
-      dbw_mkz_can::PlatformVersion platformVersion = sub_can->getVersions().findPlatform(currentPlatform, currentModule);
-      // Fetch the static platform version.
-      dbw_mkz_can::PlatformVersion platformLatest = FIRMWARE_LATEST.findPlatform(currentPlatform, currentModule);
+      if (ignoreSHIFT && isSHIFT) {
+        // Doesn't matter if the module doesn't exist, but enforce it if it does.
+        if (sub_can->getVersions().findModule(currentPlatform, currentModule).valid()) {
+          // If the module exists, make sure the version isn't old.
+          
+          // Fetch the platform version from CAN.
+          dbw_mkz_can::PlatformVersion platformVersion = sub_can->getVersions().findPlatform(currentPlatform, currentModule);
+          // Fetch the static platform version.
+          dbw_mkz_can::PlatformVersion platformLatest = FIRMWARE_LATEST.findPlatform(currentPlatform, currentModule);
+  
+          //Compare the static and CAN platform versions.
+          EXPECT_TRUE(platformVersion == platformLatest)
+            << "ERROR: Module " << moduleToString(currentModule) << " has unsupported version "
+            << platformVersion.v.major() << "." << platformVersion.v.minor() << "." << platformVersion.v.build()
+            << ", switch to "
+            << platformLatest.v.major() << "." << platformLatest.v.minor() << "." << platformLatest.v.build();
+        }
+        // If the module isn't valid, no big deal.
+        continue;
+      } else {
+        // Enforce existance and version of module.
+        EXPECT_TRUE(sub_can->getVersions().findModule(currentPlatform, currentModule).valid()) << "ERROR: Module " << moduleToString(currentModule)
+          << "(" << currentModule << ") has no valid version.";
 
-      //Compare the static and CAN platform versions.
-      EXPECT_TRUE(platformVersion == platformLatest)
-        << "ERROR: Module " << moduleToString(currentModule) << "has unsupported version"
-        << platformVersion.v.major() << "." << platformVersion.v.minor() << "." << platformVersion.v.build()
-        << ", switch to "
-        << platformLatest.v.major() << "." << platformLatest.v.minor() << "." << platformLatest.v.build();
+        // Fetch the platform version from CAN.
+        dbw_mkz_can::PlatformVersion platformVersion = sub_can->getVersions().findPlatform(currentPlatform, currentModule);
+        // Fetch the static platform version.
+        dbw_mkz_can::PlatformVersion platformLatest = FIRMWARE_LATEST.findPlatform(currentPlatform, currentModule);
+
+        //Compare the static and CAN platform versions.
+        EXPECT_TRUE(platformVersion == platformLatest)
+          << "ERROR: Module " << moduleToString(currentModule) << "has unsupported version "
+          << platformVersion.v.major() << "." << platformVersion.v.minor() << "." << platformVersion.v.build()
+          << ", switch to "
+          << platformLatest.v.major() << "." << platformLatest.v.minor() << "." << platformLatest.v.build();
+      }
+
     }
   }
 }
@@ -246,7 +299,6 @@ TEST_F(CAN_HS1, Vin)
 
 TEST_F(CAN_HS1, TirePressure)
 {
-  // TO-DO: Test this.
    // Wait for subscribers to finish setup.
   EXPECT_TRUE(waitFor<MsgRxb>(subReady, sub_tire, 5.0)) << "Could not connect to Tire Pressure data topic.";
   // Which subscriber isn't ready?
@@ -263,7 +315,6 @@ TEST_F(CAN_HS1, TirePressure)
 
 TEST_F(CAN_HS1, Surround)
 {
-  // TO-DO: Test this.
    // Wait for subscribers to finish setup.
   EXPECT_TRUE(waitFor<MsgRxb>(subReady, sub_surround, 5.0)) << "Could not connect to Surround data topic.";
   // Which subscriber isn't ready?
@@ -319,7 +370,6 @@ TEST_F(CAN_HS2, SteeringFaults)
 
 TEST_F(BasicTest, ShiftingFaults)
 {
-  // TO-DO: Test this.
   // Wait for subscribers to finish setup.
   EXPECT_TRUE(waitFor<MsgRxb>(subReady, sub_gear_report, 5.0)) << "Could not connect to GearReport topic.";
   // Which subscriber isn't ready?
@@ -338,18 +388,13 @@ TEST_F(CAN_HS1, IMU)
   // Which subscriber isn't ready?
   ASSERT_GE(sub_imu->getNumPublishers(), 1) << "IMU topic has no publishers.";
 
-  // TO-DO: Check that they are non-zero over many messages; get 1 second of data.
-
-  // TO-DO: Extend MsgRx to track flags for each IMU field; check that each field has had a valid message.
-
-  // Ensure IMU data is non-zero. Each field should be non-zero;
-  // if correct data is being received, no value should be exactly 0.
+  // Ensure IMU data is non-zero. Each field should be non-zero in some message.
+  // If correct data is being received, no value should be exactly 0.
   EXPECT_TRUE(waitFor<MsgRxIMU>(imuValid, sub_imu, 5.0));
 }
 
 TEST_F(CAN_HS1, GPS)
 {
-  // TO-DO: Test this.
   // Wait for subscribers to finish setup.
   EXPECT_TRUE(waitFor<MsgRxb>(subReady, sub_gps_fix, 5.0)) << "Could not connect to GPS fix data topic.";
   EXPECT_TRUE(waitFor<MsgRxb>(subReady, sub_gps_vel, 5.0)) << "Could not connect to GPS velocity data topic.";
@@ -402,17 +447,143 @@ TEST_F(Actuate, ActuateBrakes)
   // Which publisher isn't ready?
   ASSERT_GE(pub_brake_cmd->getNumSubscribers(), 1);
 
-  pub_brake_cmd->get().pedal_cmd = 0.5;
-  pub_brake_cmd->get().pedal_cmd_type = dbw_mkz_msgs::BrakeCmd::CMD_PERCENT;
+  pub_brake_cmd->get().pedal_cmd = 0.3;
+  pub_brake_cmd->get().pedal_cmd_type = dbw_mkz_msgs::BrakeCmd::CMD_PEDAL;
   pub_brake_cmd->get().enable = true;
   pub_brake_cmd->enable();
-  ros::WallDuration(5).sleep();
+  ros::WallDuration(3).sleep();
 
-  ASSERT_TRUE(sub_brake_report->fresh());
-  printf("sub_brake_report: %f, %f, %f, %s, %s, %s, %s\n", sub_brake_report->get().pedal_input,
-    sub_brake_report->get().pedal_cmd, sub_brake_report->get().pedal_output,
-    sub_brake_report->get().enabled ? "true" : "false", sub_brake_report->get().override ? "true" : "false",
-    sub_brake_report->get().driver ? "true" : "false", sub_brake_report->get().timeout ? "true" : "false");
+  EXPECT_TRUE(sub_brake_report->fresh());
+  EXPECT_TRUE(sub_brake_report->get().enabled);
+  // Is the pedal cmd within 0.01 of 0.3?
+  EXPECT_TRUE(abs(sub_brake_report->get().pedal_cmd - 0.3) < 0.1);
+
+  pub_brake_cmd->get().pedal_cmd = 0;
+  pub_brake_cmd->get().enable = false;
+}
+
+TEST_F(Actuate, ActuateThrottle)
+{
+  // Wait for publishers to finish setup.
+  EXPECT_TRUE(waitFor<MsgTxb>(pubReady, pub_throttle_cmd, 5.0));
+  // Which publisher isn't ready?
+  ASSERT_GE(pub_throttle_cmd->getNumSubscribers(), 1);
+
+  pub_throttle_cmd->get().pedal_cmd = 0.5;
+  pub_throttle_cmd->get().pedal_cmd_type = dbw_mkz_msgs::ThrottleCmd::CMD_PEDAL;
+  pub_throttle_cmd->get().enable = true;
+  pub_throttle_cmd->enable();
+  ros::WallDuration(3).sleep();
+
+  EXPECT_TRUE(sub_throttle_report->fresh());
+  EXPECT_TRUE(sub_throttle_report->get().enabled);
+    // Is the pedal cmd within 0.01 of 0.3?
+  EXPECT_TRUE(abs(sub_throttle_report->get().pedal_cmd - 0.5) < 0.1);
+
+  pub_throttle_cmd->get().pedal_cmd = 0;
+  pub_throttle_cmd->get().enable = false;
+}
+
+TEST_F(Actuate, ActuateSteer)
+{
+  // Wait for publishers to finish setup.
+  EXPECT_TRUE(waitFor<MsgTxb>(pubReady, pub_steer_cmd, 5.0));
+  // Which publisher isn't ready?
+  ASSERT_GE(pub_steer_cmd->getNumSubscribers(), 1);
+
+  pub_steer_cmd->get().steering_wheel_angle_cmd = 0.5;
+  pub_steer_cmd->get().cmd_type = dbw_mkz_msgs::SteeringCmd::CMD_ANGLE;
+  pub_steer_cmd->get().enable = true;
+  pub_steer_cmd->enable();
+  ros::WallDuration(3).sleep();
+
+  EXPECT_TRUE(sub_steering_report->fresh());
+
+  EXPECT_TRUE(sub_steering_report->get().enabled);
+  // Is the pedal cmd within 0.01 of 0.3?
+  EXPECT_TRUE(abs(sub_steering_report->get().steering_wheel_cmd - 0.5) < 0.1);
+
+  pub_steer_cmd->get().steering_wheel_angle_cmd = 0;
+  pub_steer_cmd->get().enable = false;
+}
+
+TEST_F(Actuate, ActuateShift)
+{
+  // Wait for publishers to finish setup.
+  EXPECT_TRUE(waitFor<MsgTxb>(pubReady, pub_brake_cmd, 5.0));
+  EXPECT_TRUE(waitFor<MsgTxb>(pubReady, pub_gear_cmd, 5.0));
+  // Which publisher isn't ready?
+  ASSERT_GE(pub_brake_cmd->getNumSubscribers(), 1);
+  ASSERT_GE(pub_gear_cmd->getNumSubscribers(), 1);
+
+  // Apply the parking brake.
+  pub_brake_cmd->get().pedal_cmd = 0.5;
+  pub_brake_cmd->get().pedal_cmd_type = dbw_mkz_msgs::BrakeCmd::CMD_PEDAL;
+  pub_brake_cmd->get().enable = true;
+  pub_brake_cmd->enable();
+  ros::WallDuration(3).sleep();
+
+  EXPECT_TRUE(sub_brake_report->fresh());
+  EXPECT_TRUE(sub_brake_report->get().enabled);
+  // Is the pedal cmd within 0.01 of 0.3?
+  ASSERT_TRUE(abs(sub_brake_report->get().pedal_cmd - 0.5) < 0.1);
+
+  pub_gear_cmd->get().cmd.gear = dbw_mkz_msgs::Gear::NEUTRAL;
+  pub_gear_cmd->enable();
+  ros::WallDuration(3).sleep();
+
+  ASSERT_TRUE(sub_steering_report->fresh());
+  // Ensure the vehicle is in neutral.
+  EXPECT_TRUE(waitFor<MsgRxb>(dataReady, sub_gear_report, 5.0));
+  ASSERT_EQ(sub_gear_report->get().state.gear, dbw_mkz_msgs::Gear::NEUTRAL) << "WARNING: Vehicle not shifted to neutral.";
+
+  // Display additional info.
+  if (sub_gear_report->get().state.gear != dbw_mkz_msgs::Gear::NEUTRAL) {
+    switch (sub_gear_report->get().reject.value) {
+      case dbw_mkz_msgs::GearReject::NONE:
+        printf("Shift rejection reason: None\n");
+      case dbw_mkz_msgs::GearReject::SHIFT_IN_PROGRESS:
+        printf("Shift rejection reason: Shift in Progress\n");
+      case dbw_mkz_msgs::GearReject::OVERRIDE:
+        printf("Shift rejection reason: Override\n");
+      case dbw_mkz_msgs::GearReject::ROTARY_LOW:
+        printf("Shift rejection reason: Rotary Low\n");
+      case dbw_mkz_msgs::GearReject::ROTARY_PARK:
+        printf("Shift rejection reason: Rotary Park\n");
+      case dbw_mkz_msgs::GearReject::VEHICLE:
+        printf("Shift rejection reason: Vehicle\n");
+    }
+  }
+
+  pub_gear_cmd->get().cmd.gear = dbw_mkz_msgs::Gear::PARK;
+  pub_gear_cmd->enable();
+  ros::WallDuration(3).sleep();
+
+  ASSERT_TRUE(sub_steering_report->fresh());
+  // Ensure the vehicle is back in park.
+  EXPECT_TRUE(waitFor<MsgRxb>(dataReady, sub_gear_report, 5.0));
+  ASSERT_EQ(sub_gear_report->get().state.gear, dbw_mkz_msgs::Gear::PARK) << "WARNING: Vehicle not shifted to park.";
+
+  // Display additional info.
+  if (sub_gear_report->get().state.gear != dbw_mkz_msgs::Gear::PARK) {
+    switch (sub_gear_report->get().reject.value) {
+      case dbw_mkz_msgs::GearReject::NONE:
+        printf("Shift rejection reason: None\n");
+      case dbw_mkz_msgs::GearReject::SHIFT_IN_PROGRESS:
+        printf("Shift rejection reason: Shift in Progress\n");
+      case dbw_mkz_msgs::GearReject::OVERRIDE:
+        printf("Shift rejection reason: Override\n");
+      case dbw_mkz_msgs::GearReject::ROTARY_LOW:
+        printf("Shift rejection reason: Rotary Low\n");
+      case dbw_mkz_msgs::GearReject::ROTARY_PARK:
+        printf("Shift rejection reason: Rotary Park\n");
+      case dbw_mkz_msgs::GearReject::VEHICLE:
+        printf("Shift rejection reason: Vehicle\n");
+    }
+  }
+
+  pub_brake_cmd->get().pedal_cmd = 0;
+  pub_brake_cmd->get().enable = false;
 }
 
 // Shift actuation requires brake pressed (do this with DBW CMD)
