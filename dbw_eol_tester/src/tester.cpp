@@ -209,14 +209,13 @@ TEST_F(System, CAN)
 TEST_F(CAN_DBW, FirmwareVersion)
 {
   // Wait for all the version messages to be sent.
-  ros::Duration(5.0).sleep();
+  ros::Duration(3.0).sleep();
 
   // Ensure version data is received.
   EXPECT_TRUE(waitFor<MsgRxCAN>(versionReady, sub_can, 5.0)) << "Timeout expired waiting for version from the vehicle.";
   ASSERT_TRUE(sub_can->freshVersion()) << "Did not receive a version message from the vehicle.";
 
   std::vector<dbw_mkz_can::Platform> versionPlatforms = sub_can->getVersions().listPlatforms();
-  // TO-DO: Ignore FORD_CD4 SHIFT missing.
   ASSERT_GT(versionPlatforms.size(), 0) << "ERROR: No module versions received.";
   EXPECT_EQ(versionPlatforms.size(), 1) << "WARNING: " << versionPlatforms.size() << " platforms detected.";
 
@@ -282,6 +281,13 @@ TEST_F(CAN_DBW, FirmwareVersion)
   }
 }
 
+TEST_F(BasicTest, License)
+{
+  // Ensure license data is received.
+  EXPECT_TRUE(waitFor<MsgRxCAN>(licenseReady, sub_can, 5.0)) << "Timeout expired waiting for license from the vehicle.";
+  ASSERT_TRUE(sub_can->freshLicense()) << "Did not receive a license message from the vehicle.";
+}
+
 TEST_F(CAN_HS1, Vin)
 {
   // Wait for subscribers to finish setup.
@@ -294,8 +300,6 @@ TEST_F(CAN_HS1, Vin)
   ASSERT_TRUE(sub_vin->fresh()) << "Did not receive a VIN from the vehicle.";
   ASSERT_NE(sub_vin->get().data.c_str(), nullptr) << "VIN received from the vehicle was empty."; // Is string not null?
 }
-
-// TO-DO: Verify license.
 
 TEST_F(CAN_HS1, TirePressure)
 {
@@ -382,7 +386,6 @@ TEST_F(BasicTest, ShiftingFaults)
 
 TEST_F(CAN_HS1, IMU)
 {
-  // TO-DO: Test this.
   // Wait for subscribers to finish setup.
   EXPECT_TRUE(waitFor<MsgRxb>(subReady, sub_imu, 5.0)) << "Could not connect to IMU topic.";
   // Which subscriber isn't ready?
