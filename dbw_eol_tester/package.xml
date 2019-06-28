@@ -19,6 +19,7 @@
   <depend>roscpp</depend>
   <depend>roslib</depend>
   <depend>dbw_mkz_ros</depend>
+  <depend>dbw_mkz_can</depend>
   <depend>dataspeed_rostest</depend>
   <depend>gtest</depend>
 
