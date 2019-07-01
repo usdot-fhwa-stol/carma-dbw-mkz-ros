@@ -58,10 +58,11 @@ class ThrottleSquare:
 
         # Parameters
         self.time_current = 0.00
-        self.param_duration = rospy.get_param("~duration", 30.000)    # Duration in seconds.
-        self.param_resolution = rospy.get_param("~resolution", 0.050) # Time between recording values.
-        self.param_minimum = rospy.get_param("~minimum", 0.150)       # Minimum throttle value, when oscillating.
-        self.param_maximum = rospy.get_param("~maximum", 0.600)       # Maximum throttle value, when oscillating.
+        self.param_start_delay = rospy.get_param("~start_delay", 2.00) # Delay in seconds before the script starts.
+        self.param_duration = rospy.get_param("~duration", 30.000)     # Duration in seconds.
+        self.param_resolution = rospy.get_param("~resolution", 0.050)  # Time between recording values.
+        self.param_minimum = rospy.get_param("~minimum", 0.150)        # Minimum throttle value, when oscillating.
+        self.param_maximum = rospy.get_param("~maximum", 0.600)        # Maximum throttle value, when oscillating.
         self.range = self.param_maximum - self.param_minimum
         self.median = self.param_minimum + (self.range / 2)
 
@@ -94,7 +95,7 @@ class ThrottleSquare:
         self.pub_enable.publish(Empty())
         
         # Wait for the system to start up before starting the script.
-        rospy.sleep(0.5)
+        rospy.sleep(self.param_start_delay)
         # Periodically receive/record messages
         rospy.Timer(rospy.Duration(self.param_resolution), self.timer_process)
 

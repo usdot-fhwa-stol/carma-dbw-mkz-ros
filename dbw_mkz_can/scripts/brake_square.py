@@ -58,10 +58,11 @@ class BrakeSquare:
 
         # Parameters
         self.time_current = 0.00
-        self.param_duration = rospy.get_param("~duration", 30.000)    # Duration in seconds.
-        self.param_resolution = rospy.get_param("~resolution", 0.050) # Time between recording values.
-        self.param_minimum = rospy.get_param("~minimum", 0.150)       # Minimum brake value, when oscillating.
-        self.param_maximum = rospy.get_param("~maximum", 0.350)       # Maximum brake value, when oscillating.
+        self.param_start_delay = rospy.get_param("~start_delay", 2.00) # Delay in seconds before the script starts.
+        self.param_duration = rospy.get_param("~duration", 30.000)     # Duration in seconds.
+        self.param_resolution = rospy.get_param("~resolution", 0.050)  # Time between recording values.
+        self.param_minimum = rospy.get_param("~minimum", 0.150)        # Minimum brake value, when oscillating.
+        self.param_maximum = rospy.get_param("~maximum", 0.350)        # Maximum brake value, when oscillating.
 
         rospy.loginfo('Recording brake pedal data every ' + "{:.03f}".format(self.param_resolution) + ' seconds from 0.000 to '
                         + "{:.03f}".format(self.param_duration) + ' with ' + "{:.03f}".format(self.param_resolution) + ' increments.')
@@ -92,7 +93,7 @@ class BrakeSquare:
         self.pub_enable.publish(Empty())
         
         # Wait for the system to start up before starting the script.
-        rospy.sleep(0.5)
+        rospy.sleep(self.param_start_delay)
         # Periodically receive/record messages
         rospy.Timer(rospy.Duration(self.param_resolution), self.timer_process)
 
