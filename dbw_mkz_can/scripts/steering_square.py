@@ -108,7 +108,7 @@ class SteeringSquare:
             if not self.msg_gear_report.state.gear == self.msg_gear_report.state.PARK:
                 rospy.logerr('Gear check failed. Vehicle not in park.')
                 rospy.signal_shutdown('')
-        elif self.time_current < self.param_duration:
+        elif self.time_current < (self.param_duration + self.param_start_delay):
             # Check for new messages
             if not self.msg_steering_report_ready:
                 rospy.logerr('No new messages on topic \'/vehicle/steering_report\'')
@@ -133,12 +133,13 @@ class SteeringSquare:
         self.time_current += self.param_resolution
         self.msg_steering_report_ready = False
         self.msg_gear_report_ready = False
-        # square alternates between min and max, 
-        rospy.loginfo("VALUE:" + str((self.range / 2.0)))
-        self.steering_cmd = self.param_maximum if self.time_current % 2 > 1 else self.param_minimum
+        # Only send commands after the start delay elapses.
+        if self.time_current > self.param_start_delay:
+            # square alternates between min and max, 
+            self.steering_cmd = self.param_maximum if self.time_current % 2 > 1 else self.param_minimum
 
     def timer_cmd(self, event):
-        if self.time_current < self.param_duration:
+        if self.time_current < (self.param_duration + self.param_start_delay):
             msg = SteeringCmd()
             msg.enable = True
             msg.cmd_type = SteeringCmd.CMD_ANGLE

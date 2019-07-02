@@ -114,7 +114,7 @@ class BrakeSine:
             if not self.msg_gear_report.state.gear == self.msg_gear_report.state.PARK:
                 rospy.logerr('Gear check failed. Vehicle not in park.')
                 rospy.signal_shutdown('')
-        elif self.time_current < self.param_duration:
+        elif self.time_current < (self.param_duration + self.param_start_delay):
             # Check for new messages
             if not self.msg_brake_report_ready:
                 rospy.logerr('No new messages on topic \'/vehicle/brake_report\'')
@@ -146,13 +146,14 @@ class BrakeSine:
         self.time_current += self.param_resolution
         self.msg_brake_report_ready = False
         self.msg_brake_info_report_ready = False
-        # sin ranges from -1 to 1, so this value ranges from self.param_minimum to self.param_maximum.
-        # starts at the middle of the range (pi/4).
-        self.brake_cmd = self.median + (math.sin(math.pi/4 + self.time_current) * (self.range / 2.0))
-        rospy.loginfo("VALUE:" + str(self.brake_cmd))
+        # Only send commands after the start delay elapses.
+        if self.time_current > self.param_start_delay:
+            # sin ranges from -1 to 1, so this value ranges from self.param_minimum to self.param_maximum.
+            # starts at the middle of the range (pi/6).
+            self.brake_cmd = self.median + (math.sin(math.pi/6 + self.time_current - self.param_start_delay) * (self.range / 2.0))
 
     def timer_cmd(self, event):
-        if self.brake_cmd > 0.0:
+        if self.time_current < (self.param_duration + self.param_start_delay):
             msg = BrakeCmd()
             msg.enable = True
             msg.pedal_cmd_type = BrakeCmd.CMD_PEDAL
