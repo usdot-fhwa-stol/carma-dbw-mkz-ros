@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <launch>
   <!-- Parameters -->
-  <arg name="start_delay" default="2.000"  doc="Delay in seconds before the script starts."               />
-  <arg name="duration"    default="30.000" doc="The duration for the steering_square to run, in seconds." />
-  <arg name="resolution"  default="0.050"  doc="Time between recording values."                           />
-  <arg name="minimum"     default="-2.000" doc="Minimum (leftmost) steering value, when oscillating."     />
-  <arg name="maximum"     default="2.000"  doc="Maximum (rightmost) steering value, when oscillating."    />
+  <arg name="start_delay" default="2.000"  doc="Delay in seconds before the script starts."                                       />
+  <arg name="period"      default="4.000"  doc="Number of seconds per oscillation."                                               />
+  <arg name="duration"    default="30.000" doc="The duration for the steering_square to run, in seconds."                         />
+  <arg name="resolution"  default="0.050"  doc="Time between recording values."                                                   />
+  <arg name="minimum"     default="-2.000" doc="Minimum (leftmost) steering value, when oscillating."                             />
+  <arg name="maximum"     default="2.000"  doc="Maximum (rightmost) steering value, when oscillating."                            />
+  <arg name="use_percent" default="true"   doc="Whether to use percent. Otherwise use unitless. Make sure to modify min and max!" />
 
   <!-- Base DBW Program -->
   <include file="$(find dbw_mkz_can)/launch/dbw.launch">
@@ -14,10 +16,12 @@
   <!-- Main steering_square.py script. required=true kills the other nodes when the script finishes. -->
   <node pkg="dbw_mkz_can" type="steering_square.py" name="steering_square" output="screen" required="true">
     <param name="start_delay" value="$(arg start_delay)" />
+    <param name="period"      value="$(arg period)"      />
     <param name="duration"    value="$(arg duration)"    />
     <param name="resolution"  value="$(arg resolution)"  />
     <param name="minimum"     value="$(arg minimum)"     />
     <param name="maximum"     value="$(arg maximum)"     />
+    <param name="use_percent" value="$(arg use_percent)" />
   </node>
 
 </launch>

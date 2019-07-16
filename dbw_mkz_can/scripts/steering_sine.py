@@ -55,10 +55,12 @@ class SteeringSine:
         # Parameters
         self.time_current = 0.00
         self.param_start_delay = rospy.get_param("~start_delay", 2.00) # Delay in seconds before the script starts.
+        self.param_period = rospy.get_param("~period", 4)              # Number of seconds per oscillation.
         self.param_duration = rospy.get_param("~duration", 30.000)     # Duration in seconds.
         self.param_resolution = rospy.get_param("~resolution", 0.050)  # Time between recording values.
-        self.param_minimum = rospy.get_param("~minimum", -2.000)       # Minimum (leftmost) steering value, when oscillating.
-        self.param_maximum = rospy.get_param("~maximum", 2.000)        # Maximum (rightmost) steering value, when oscillating.
+        self.param_minimum = rospy.get_param("~minimum", -2.000)       # Minimum brake value, when oscillating.
+        self.param_maximum = rospy.get_param("~maximum", 2.000)        # Maximum brake value, when oscillating.
+        self.param_use_angle = rospy.get_param("~use_angle", True)     # Use percent (true) or torque (false).
         self.range = self.param_maximum - self.param_minimum
         self.median = 0
 
@@ -136,16 +138,16 @@ class SteeringSine:
         # Only send commands after the start delay elapses.
         if self.time_current > self.param_start_delay:
             # sin ranges from -1 to 1, so this value ranges from self.param_minimum to self.param_maximum.
-            # starts at the middle of the range (pi/6).
-            self.steering_cmd = self.median + (math.sin(math.pi/6 + self.time_current - self.param_start_delay) * (self.range / 2.0))
+            self.steering_cmd = self.median + (math.sin(3*math.pi/2 + (self.time_current - self.param_start_delay) * (math.pi*2 / self.param_period)) * (self.range / 2.0))
 
     def timer_cmd(self, event):
+        msg = SteeringCmd()
+        msg.enable = True
         if self.time_current < (self.param_duration + self.param_start_delay):
-            msg = SteeringCmd()
-            msg.enable = True
-            msg.cmd_type = SteeringCmd.CMD_ANGLE
+            msg.cmd_type = SteeringCmd.CMD_ANGLE if self.param_use_angle else SteeringCmd.CMD_TORQUE
             msg.steering_wheel_angle_cmd = self.steering_cmd
-            self.pub_steering.publish(msg)
+        self.pub_steering.publish(msg)
+
 
     def recv_gear(self, msg):
         self.msg_gear_report = msg

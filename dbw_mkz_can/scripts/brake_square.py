@@ -59,10 +59,12 @@ class BrakeSquare:
         # Parameters
         self.time_current = 0.00
         self.param_start_delay = rospy.get_param("~start_delay", 2.00) # Delay in seconds before the script starts.
+        self.param_period = rospy.get_param("~period", 4)              # Number of seconds per oscillation.
         self.param_duration = rospy.get_param("~duration", 30.000)     # Duration in seconds.
         self.param_resolution = rospy.get_param("~resolution", 0.050)  # Time between recording values.
-        self.param_minimum = rospy.get_param("~minimum", 0.150)        # Minimum brake value, when oscillating.
-        self.param_maximum = rospy.get_param("~maximum", 0.350)        # Maximum brake value, when oscillating.
+        self.param_minimum = rospy.get_param("~minimum", 0.000)        # Minimum brake value, when oscillating.
+        self.param_maximum = rospy.get_param("~maximum", 1.000)        # Maximum brake value, when oscillating.
+        self.param_use_percent = rospy.get_param("~use_percent", True) # Use percent (true) or pedal raw (false).
 
         rospy.loginfo('Recording brake pedal data every ' + "{:.03f}".format(self.param_resolution) + ' seconds from 0.000 to '
                         + "{:.03f}".format(self.param_duration) + ' with ' + "{:.03f}".format(self.param_resolution) + ' increments.')
@@ -147,14 +149,13 @@ class BrakeSquare:
         # Only send commands after the start delay elapses.
         if self.time_current > self.param_start_delay:
             # square alternates between min and max, 
-            # starts at the middle of the range (pi/4).
-            self.brake_cmd = self.param_maximum if self.time_current % 2 > 1 else self.param_minimum
+            self.brake_cmd = self.param_maximum if self.time_current % self.param_period > (self.param_period / 2) else self.param_minimum
 
     def timer_cmd(self, event):
         if self.time_current < (self.param_duration + self.param_start_delay):
             msg = BrakeCmd()
             msg.enable = True
-            msg.pedal_cmd_type = BrakeCmd.CMD_PEDAL
+            msg.pedal_cmd_type = BrakeCmd.CMD_PERCENT if self.param_use_percent else BrakeCmd.CMD_PEDAL
             msg.pedal_cmd = self.brake_cmd
             self.pub_brake.publish(msg)
 
