@@ -431,6 +431,13 @@ void DbwNode::recvCAN(const can_msgs::Frame::ConstPtr& msg)
         }
         break;
 
+      case ID_4WD_REPORT:
+        if (msg->dlc >= 1) {
+          const Msg4wdReport *ptr = (const Msg4wdReport*)msg->data.elems;
+          ROS_WARN("ID_4WD_REPORT TEST: %d", ptr->STATE);
+        }
+        break;
+
       case ID_MISC_REPORT:
         if (msg->dlc >= 3) {
           const MsgMiscReport *ptr = (const MsgMiscReport*)msg->data.elems;

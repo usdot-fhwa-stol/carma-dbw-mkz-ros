@@ -156,6 +156,15 @@ typedef struct {
 } MsgGearReport;
 
 typedef struct {
+  uint8_t STATE :3;
+  uint8_t OVERRIDE :1;
+  uint8_t CMD :3;
+  uint8_t FLTBUS :1;
+  uint8_t REJECT :3;
+  uint8_t :5;
+} Msg4wdReport;
+
+typedef struct {
   uint8_t TRNCMD :2;
   uint8_t :6;
 } MsgTurnSignalCmd;
@@ -492,6 +501,7 @@ static void dispatchAssertSizes() {
   BUILD_ASSERT(3 == sizeof(MsgReportDriverAssist));
   BUILD_ASSERT(8 == sizeof(MsgLicense));
   BUILD_ASSERT(8 == sizeof(MsgVersion));
+  BUILD_ASSERT(2 == sizeof(Msg4wdReport));
 }
 #undef BUILD_ASSERT
 
@@ -519,6 +529,7 @@ enum {
   ID_REPORT_BRAKE_INFO      = 0x074,
   ID_REPORT_THROTTLE_INFO   = 0x075,
   ID_REPORT_DRIVER_ASSIST   = 0x079,
+  ID_4WD_REPORT             = 0x07B,
   ID_LICENSE                = 0x07E,
   ID_VERSION                = 0x07F,
 };
