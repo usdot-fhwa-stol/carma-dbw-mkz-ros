@@ -431,10 +431,10 @@ void DbwNode::recvCAN(const can_msgs::Frame::ConstPtr& msg)
         }
         break;
 
-      case ID_4WD_REPORT:
+      case ID_AWD_REPORT:
         if (msg->dlc >= 1) {
-          const Msg4wdReport *ptr = (const Msg4wdReport*)msg->data.elems;
-          ROS_WARN("ID_4WD_REPORT TEST: %d", ptr->STATE);
+          const MsgAwdReport *ptr = (const MsgAwdReport*)msg->data.elems;
+          ROS_WARN("ID_AWD_REPORT TEST: %d", ptr->STATE);
         }
         break;
 
@@ -874,8 +874,12 @@ void DbwNode::recvCAN(const can_msgs::Frame::ConstPtr& msg)
         ROS_WARN_COND(warn_cmds_, "DBW system: Another node on the CAN bus is commanding the vehicle!!! Subsystem: Shifting. Id: 0x%03X", ID_GEAR_CMD);
         break;
       case ID_MISC_CMD:
-        ROS_WARN_COND(warn_cmds_, "DBW system: Another node on the CAN bus is commanding the vehicle!!! Subsystem: Turn Signals. Id: 0x%03X", ID_MISC_CMD);
+        ROS_WARN_COND(warn_cmds_, "DBW system: Another node on the CAN bus is commanding the vehicle!!! Subsystem: Shifting. Id: 0x%03X", ID_GEAR_CMD);
         break;
+      case ID_AWD_CMD:
+        const MsgAwdCmd *ptr = (const MsgAwdCmd*)msg->data.elems;
+        ROS_WARN("ID_MISC_CMD TEST: %d", ptr->GCMD);
+        break;             
     }
   }
 #if 0
