@@ -1027,7 +1027,7 @@ void DbwNode::recvBrakeCmd(const dbw_mkz_msgs::BrakeCmd::ConstPtr& msg)
       break;
     case dbw_mkz_msgs::BrakeCmd::CMD_PEDAL:
       ptr->CMD_TYPE = dbw_mkz_msgs::BrakeCmd::CMD_PEDAL;
-      ptr->PCMD = std::max((float)0.0, std::min((float)UINT16_MAX, msg->pedal_cmd * UINT16_MAX));
+      ptr->PCMD = std::clamp<float>(msg->pedal_cmd * UINT16_MAX, 0, UINT16_MAX);
       if (!firmware_.findModule(M_BPEC).valid() && firmware_.findModule(M_ABS).valid()) {
         ROS_WARN_THROTTLE(1.0, "Module ABS does not support brake command type PEDAL");
       }
@@ -1035,19 +1035,19 @@ void DbwNode::recvBrakeCmd(const dbw_mkz_msgs::BrakeCmd::ConstPtr& msg)
     case dbw_mkz_msgs::BrakeCmd::CMD_PERCENT:
       if (fwd) {
         ptr->CMD_TYPE = dbw_mkz_msgs::BrakeCmd::CMD_PERCENT;
-        ptr->PCMD = std::max((float)0.0, std::min((float)UINT16_MAX, msg->pedal_cmd * UINT16_MAX));
+        ptr->PCMD = std::clamp<float>(msg->pedal_cmd * UINT16_MAX, 0, UINT16_MAX);
       } else {
         ptr->CMD_TYPE = dbw_mkz_msgs::BrakeCmd::CMD_PEDAL;
-        ptr->PCMD = std::max((float)0.0, std::min((float)UINT16_MAX, brakePedalFromPercent(msg->pedal_cmd) * UINT16_MAX));
+        ptr->PCMD = std::clamp<float>(brakePedalFromPercent(msg->pedal_cmd) * UINT16_MAX, 0, UINT16_MAX);
       }
       break;
     case dbw_mkz_msgs::BrakeCmd::CMD_TORQUE:
       if (fwd) {
         ptr->CMD_TYPE = dbw_mkz_msgs::BrakeCmd::CMD_TORQUE;
-        ptr->PCMD = std::max((float)0.0, std::min((float)UINT16_MAX, msg->pedal_cmd));
+        ptr->PCMD = std::clamp<float>(msg->pedal_cmd, 0, UINT16_MAX);
       } else {
         ptr->CMD_TYPE = dbw_mkz_msgs::BrakeCmd::CMD_PEDAL;
-        ptr->PCMD = std::max((float)0.0, std::min((float)UINT16_MAX, brakePedalFromTorque(msg->pedal_cmd) * UINT16_MAX));
+        ptr->PCMD = std::clamp<float>(brakePedalFromTorque(msg->pedal_cmd) * UINT16_MAX, 0, UINT16_MAX);
       }
       if (!firmware_.findModule(M_BPEC).valid() && firmware_.findModule(M_ABS).valid()) {
         ROS_WARN_THROTTLE(1.0, "Module ABS does not support brake command type TORQUE");
@@ -1058,15 +1058,15 @@ void DbwNode::recvBrakeCmd(const dbw_mkz_msgs::BrakeCmd::ConstPtr& msg)
         // CMD_TORQUE_RQ must be forwarded, there is no local implementation
         fwd = true;
         ptr->CMD_TYPE = dbw_mkz_msgs::BrakeCmd::CMD_TORQUE_RQ;
-        ptr->PCMD = std::max((float)0.0, std::min((float)UINT16_MAX, msg->pedal_cmd));
+        ptr->PCMD = std::clamp<float>(msg->pedal_cmd, 0, UINT16_MAX);
       } else if (fwd) {
         // Fallback to forwarded CMD_TORQUE
         ptr->CMD_TYPE = dbw_mkz_msgs::BrakeCmd::CMD_TORQUE;
-        ptr->PCMD = std::max((float)0.0, std::min((float)UINT16_MAX, msg->pedal_cmd));
+        ptr->PCMD = std::clamp<float>(msg->pedal_cmd, 0, UINT16_MAX);
       } else {
         // Fallback to local CMD_TORQUE
         ptr->CMD_TYPE = dbw_mkz_msgs::BrakeCmd::CMD_PEDAL;
-        ptr->PCMD = std::max((float)0.0, std::min((float)UINT16_MAX, brakePedalFromTorque(msg->pedal_cmd) * UINT16_MAX));
+        ptr->PCMD = std::clamp<float>(brakePedalFromTorque(msg->pedal_cmd) * UINT16_MAX, 0, UINT16_MAX);
       }
       if (!firmware_.findModule(M_BPEC).valid() && firmware_.findModule(M_ABS).valid()) {
         ROS_WARN_THROTTLE(1.0, "Module ABS does not support brake command type TORQUE_RQ");
@@ -1075,7 +1075,7 @@ void DbwNode::recvBrakeCmd(const dbw_mkz_msgs::BrakeCmd::ConstPtr& msg)
     case dbw_mkz_msgs::BrakeCmd::CMD_DECEL:
       // CMD_DECEL must be forwarded, there is no local implementation
       ptr->CMD_TYPE = dbw_mkz_msgs::BrakeCmd::CMD_DECEL;
-      ptr->PCMD = std::max((float)0.0, std::min((float)10e3, msg->pedal_cmd * 1e3f));
+      ptr->PCMD = std::clamp<float>(msg->pedal_cmd * 1e3f, 0, 10e3);
       if (!firmware_.findModule(M_ABS).valid() && firmware_.findModule(M_BPEC).valid()) {
         ROS_WARN_THROTTLE(1.0, "Module BPEC does not support brake command type DECEL");
       }
@@ -1147,7 +1147,7 @@ void DbwNode::recvThrottleCmd(const dbw_mkz_msgs::ThrottleCmd::ConstPtr& msg)
       ROS_WARN("Unknown throttle command type: %u", msg->pedal_cmd_type);
       break;
   }
-  ptr->PCMD = std::max((float)0.0, std::min((float)UINT16_MAX, cmd * UINT16_MAX));
+  ptr->PCMD = std::clamp<float>(cmd * UINT16_MAX, 0, UINT16_MAX);
   if (enabled() && msg->enable) {
     ptr->EN = 1;
   }
@@ -1171,18 +1171,18 @@ void DbwNode::recvSteeringCmd(const dbw_mkz_msgs::SteeringCmd::ConstPtr& msg)
   memset(ptr, 0x00, sizeof(*ptr));
   switch (msg->cmd_type) {
     case dbw_mkz_msgs::SteeringCmd::CMD_ANGLE:
-      ptr->SCMD = std::max((float)-INT16_MAX, std::min((float)INT16_MAX, (float)(msg->steering_wheel_angle_cmd * (180 / M_PI * 10))));
+      ptr->SCMD = std::clamp<float>(msg->steering_wheel_angle_cmd * (float)(180 / M_PI * 10), -INT16_MAX, INT16_MAX);
       if (fabsf(msg->steering_wheel_angle_velocity) > 0) {
         if (firmware_.findModule(M_EPS).valid() || (firmware_.findPlatform(M_STEER) >= FIRMWARE_HIGH_RATE_LIMIT)) {
-          ptr->SVEL = std::max((float)1, std::min((float)254, (float)roundf(fabsf(msg->steering_wheel_angle_velocity) * 180 / M_PI / 4)));
+          ptr->SVEL = std::clamp<float>(roundf(fabsf(msg->steering_wheel_angle_velocity) * (float)(180 / M_PI / 4)), 1, 254);
         } else {
-          ptr->SVEL = std::max((float)1, std::min((float)254, (float)roundf(fabsf(msg->steering_wheel_angle_velocity) * 180 / M_PI / 2)));
+          ptr->SVEL = std::clamp<float>(roundf(fabsf(msg->steering_wheel_angle_velocity) * (float)(180 / M_PI / 2)), 1, 254);
         }
       }
       ptr->CMD_TYPE = dbw_mkz_msgs::SteeringCmd::CMD_ANGLE;
       break;
     case dbw_mkz_msgs::SteeringCmd::CMD_TORQUE:
-      ptr->SCMD = std::max((float)-INT16_MAX, std::min((float)INT16_MAX, (float)(msg->steering_wheel_torque_cmd * 128)));
+      ptr->SCMD = std::clamp<float>(msg->steering_wheel_torque_cmd * 128, -INT16_MAX, INT16_MAX);
       ptr->CMD_TYPE = dbw_mkz_msgs::SteeringCmd::CMD_TORQUE;
       if (!firmware_.findModule(M_EPS).valid() && firmware_.findModule(M_STEER).valid()) {
         ROS_WARN_THROTTLE(1.0, "Module STEER does not support steering command type TORQUE");
