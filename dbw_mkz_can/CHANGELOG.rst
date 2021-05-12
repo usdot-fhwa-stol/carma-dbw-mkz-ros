@@ -2,6 +2,15 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Bump firmware versions
+* C++17 and std::clamp()
+* Remove ROS Kinetic support
+* Populate brake/throttle/steering command values even if enable is false
+* Fix socketcan error frame lock up
+* Contributors: Kevin Hallenbeck, Robert Maupin
+
 1.3.2 (2021-03-09)
 ------------------
 * Bump firmware versions
