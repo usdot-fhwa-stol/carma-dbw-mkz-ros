@@ -2,8 +2,8 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.4.0 (2021-05-12)
+------------------
 * Bump firmware versions
 * C++17 and std::clamp()
 * Remove ROS Kinetic support
