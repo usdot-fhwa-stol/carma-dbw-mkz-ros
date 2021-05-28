@@ -1204,6 +1204,9 @@ void DbwNode::recvSteeringCmd(const dbw_mkz_msgs::SteeringCmd::ConstPtr& msg)
   if (msg->quiet) {
     ptr->QUIET = 1;
   }
+  if (msg->alert) {
+    ptr->ALERT = 1;
+  }
   ptr->COUNT = msg->count;
   pub_can_.publish(out);
 }

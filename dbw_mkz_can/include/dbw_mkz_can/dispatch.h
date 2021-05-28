@@ -115,7 +115,7 @@ typedef struct {
   uint8_t :1;
   uint8_t QUIET :1;
   uint8_t RES1 :1;
-  uint8_t :1;
+  uint8_t ALERT :1;
   uint8_t CMD_TYPE :1;
   uint8_t SVEL;
   uint8_t :8;
