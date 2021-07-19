@@ -696,6 +696,7 @@ void DbwNode::recvCAN(const can_msgs::Frame::ConstPtr& msg)
             out.engine_rpm = (float)ptr->engine_rpm * 0.25f;
           }
           out.gear_num.num = ptr->gear_num;
+          out.ignition.value = ptr->ign_stat;
           if ((uint16_t)ptr->batt_curr == 0xE000) {
             out.batt_curr = NAN;
           } else {

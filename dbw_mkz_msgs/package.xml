@@ -50,6 +50,7 @@
     <rosbag_migration_rule rule_file="bmr/1.2.11-1.3.0/BrakeReport.bmr"/>
     <rosbag_migration_rule rule_file="bmr/1.2.11-1.3.0/ThrottleInfoReport.bmr"/>
     <rosbag_migration_rule rule_file="bmr/1.4.0-1.4.1/SteeringCmd.bmr"/>
+    <rosbag_migration_rule rule_file="bmr/1.4.0-1.4.1/ThrottleInfoReport.bmr"/>
   </export>
 
 </package>

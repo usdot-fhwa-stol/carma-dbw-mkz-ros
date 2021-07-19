@@ -345,7 +345,7 @@ typedef struct {
   int8_t throttle_rate :8;
   uint8_t gear_num :5;
   uint8_t :3;
-  uint8_t :2;
+  uint8_t ign_stat :2;
   int16_t batt_curr :14;
 } MsgReportThrottleInfo;
 
