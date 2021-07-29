@@ -434,6 +434,15 @@ void DbwNode::recvCAN(const can_msgs::Frame::ConstPtr& msg)
         }
         break;
 
+      case 0x200:
+        if (msg->dlc >= 1) {
+          if (msg->data[0] == 1) {
+            ROS_WARN("MSG 0x200 enabling system");
+            enableSystem();
+          }
+        }
+        break;
+
       case ID_MISC_REPORT:
         if (msg->dlc >= 3) {
           const MsgMiscReport *ptr = (const MsgMiscReport*)msg->data.elems;
