@@ -868,19 +868,19 @@ void DbwNode::recvCAN(const can_msgs::Frame::ConstPtr& msg)
         break;
 
       case ID_BRAKE_CMD:
-        ROS_WARN_COND(warn_cmds_ && !((const MsgBrakeCmd*)msg->data.elems)->RES1,
+        ROS_WARN_COND(warn_cmds_ && !((const MsgBrakeCmd*)msg->data.elems)->RES1 && !((const MsgBrakeCmd*)msg->data.elems)->RES2,
                                   "DBW system: Another node on the CAN bus is commanding the vehicle!!! Subsystem: Brake. Id: 0x%03X", ID_BRAKE_CMD);
         break;
       case ID_THROTTLE_CMD:
-        ROS_WARN_COND(warn_cmds_ && !((const MsgThrottleCmd*)msg->data.elems)->RES1,
+        ROS_WARN_COND(warn_cmds_ && !((const MsgThrottleCmd*)msg->data.elems)->RES1 && !((const MsgThrottleCmd*)msg->data.elems)->RES2,
                                   "DBW system: Another node on the CAN bus is commanding the vehicle!!! Subsystem: Throttle. Id: 0x%03X", ID_THROTTLE_CMD);
         break;
       case ID_STEERING_CMD:
-        ROS_WARN_COND(warn_cmds_ && !((const MsgSteeringCmd*)msg->data.elems)->RES1,
+        ROS_WARN_COND(warn_cmds_ && !((const MsgSteeringCmd*)msg->data.elems)->RES1 && !((const MsgSteeringCmd*)msg->data.elems)->RES2,
                                   "DBW system: Another node on the CAN bus is commanding the vehicle!!! Subsystem: Steering. Id: 0x%03X", ID_STEERING_CMD);
         break;
       case ID_GEAR_CMD:
-        ROS_WARN_COND(warn_cmds_ && !((const MsgGearCmd*)msg->data.elems)->RES1,
+        ROS_WARN_COND(warn_cmds_ && !((const MsgGearCmd*)msg->data.elems)->RES1 && !((const MsgGearCmd*)msg->data.elems)->RES2,
                                   "DBW system: Another node on the CAN bus is commanding the vehicle!!! Subsystem: Shifting. Id: 0x%03X", ID_GEAR_CMD);
         break;
       case ID_MISC_CMD:

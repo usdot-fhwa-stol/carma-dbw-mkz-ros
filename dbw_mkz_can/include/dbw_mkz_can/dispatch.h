@@ -50,7 +50,8 @@ typedef struct {
   uint8_t EN :1;
   uint8_t CLEAR :1;
   uint8_t IGNORE :1;
-  uint8_t :4;
+  uint8_t :3;
+  uint8_t RES2 :1;
   uint8_t RES1 :1;
   uint8_t :8;
   uint8_t :8;
@@ -83,7 +84,8 @@ typedef struct {
   uint8_t EN :1;
   uint8_t CLEAR :1;
   uint8_t IGNORE :1;
-  uint8_t :4;
+  uint8_t :3;
+  uint8_t RES2 :1;
   uint8_t RES1 :1;
   uint8_t :8;
   uint8_t :8;
@@ -118,7 +120,8 @@ typedef struct {
   uint8_t ALERT :1;
   uint8_t CMD_TYPE :1;
   uint8_t SVEL;
-  uint8_t :8;
+  uint8_t RES2 :1;
+  uint8_t :7;
   uint8_t :8;
   uint8_t :8;
   uint8_t COUNT;
@@ -142,7 +145,8 @@ typedef struct {
 
 typedef struct {
   uint8_t GCMD :3;
-  uint8_t :3;
+  uint8_t :2;
+  uint8_t RES2 :1;
   uint8_t RES1 :1;
   uint8_t CLEAR :1;
 } MsgGearCmd;
