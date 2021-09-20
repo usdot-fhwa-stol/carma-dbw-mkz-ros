@@ -2,6 +2,12 @@
 Changelog for package dbw_mkz_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add ignition status to ThrottleInfoReport
+* Add user control of alert
+* Contributors: Kevin Hallenbeck
+
 1.4.0 (2021-05-12)
 ------------------
 
