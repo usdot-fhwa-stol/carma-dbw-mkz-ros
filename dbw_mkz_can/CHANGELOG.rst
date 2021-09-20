@@ -2,8 +2,8 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.4.1 (2021-09-20)
+------------------
 * Bump firmware versions
 * Add reserved bits
 * Improve printing of license info
