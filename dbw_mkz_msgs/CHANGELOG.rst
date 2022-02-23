@@ -2,8 +2,8 @@
 Changelog for package dbw_mkz_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.5.0 (2022-02-23)
+------------------
 * Add electric parking brake control
 * Rename TurnSignalCmd to MiscCmd
 * Contributors: Kevin Hallenbeck
