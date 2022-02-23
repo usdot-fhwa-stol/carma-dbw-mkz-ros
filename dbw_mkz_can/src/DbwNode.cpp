@@ -213,7 +213,8 @@ DbwNode::DbwNode(ros::NodeHandle &node, ros::NodeHandle &priv_nh)
   sub_throttle_ = node.subscribe("throttle_cmd", 1, &DbwNode::recvThrottleCmd, this, NODELAY);
   sub_steering_ = node.subscribe("steering_cmd", 1, &DbwNode::recvSteeringCmd, this, NODELAY);
   sub_gear_ = node.subscribe("gear_cmd", 1, &DbwNode::recvGearCmd, this, NODELAY);
-  sub_turn_signal_ = node.subscribe("turn_signal_cmd", 1, &DbwNode::recvTurnSignalCmd, this, NODELAY);
+  sub_turn_signal_ = node.subscribe("turn_signal_cmd", 1, &DbwNode::recvMiscCmd, this, NODELAY); // Backwards compatiblity
+  sub_misc_ = node.subscribe("misc_cmd", 1, &DbwNode::recvMiscCmd, this, NODELAY);
 
   // Setup Timer
   timer_ = node.createTimer(ros::Duration(1 / 20.0), &DbwNode::timerCallback, this);
@@ -1233,16 +1234,17 @@ void DbwNode::recvGearCmd(const dbw_mkz_msgs::GearCmd::ConstPtr& msg)
   pub_can_.publish(out);
 }
 
-void DbwNode::recvTurnSignalCmd(const dbw_mkz_msgs::TurnSignalCmd::ConstPtr& msg)
+void DbwNode::recvMiscCmd(const dbw_mkz_msgs::MiscCmd::ConstPtr& msg)
 {
   can_msgs::Frame out;
   out.id = ID_MISC_CMD;
   out.is_extended = false;
-  out.dlc = sizeof(MsgTurnSignalCmd);
-  MsgTurnSignalCmd *ptr = (MsgTurnSignalCmd*)out.data.elems;
+  out.dlc = sizeof(MsgMiscCmd);
+  MsgMiscCmd *ptr = (MsgMiscCmd*)out.data.elems;
   memset(ptr, 0x00, sizeof(*ptr));
   if (enabled()) {
     ptr->TRNCMD = msg->cmd.value;
+    ptr->PBRKCMD = msg->pbrk.cmd;
   }
   pub_can_.publish(out);
 }
