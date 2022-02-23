@@ -2,6 +2,12 @@
 Changelog for package dbw_mkz_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add electric parking brake control
+* Rename TurnSignalCmd to MiscCmd
+* Contributors: Kevin Hallenbeck
+
 1.4.1 (2021-09-20)
 ------------------
 * Add ignition status to ThrottleInfoReport
