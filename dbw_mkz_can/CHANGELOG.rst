@@ -2,6 +2,11 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Bump firmware versions
+* Contributors: Kevin Hallenbeck
+
 1.5.0 (2022-02-23)
 ------------------
 * Add Ford Mustang Mach-E
