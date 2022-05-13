@@ -2,6 +2,12 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Periodically publish DBW enabled status in addition to latched and on change
+* Bump firmware versions
+* Contributors: Kevin Hallenbeck
+
 1.5.1 (2022-03-08)
 ------------------
 * Bump firmware versions
