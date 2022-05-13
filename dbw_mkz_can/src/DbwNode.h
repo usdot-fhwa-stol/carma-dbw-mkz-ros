@@ -118,7 +118,7 @@ private:
   inline bool override() { return override_brake_ || override_throttle_ || override_steering_ || override_gear_; }
   inline bool clear() { return enable_ && override(); }
   inline bool enabled() { return enable_ && !fault() && !override(); }
-  bool publishDbwEnabled();
+  bool publishDbwEnabled(bool force = false);
   void enableSystem();
   void disableSystem();
   void buttonCancel();

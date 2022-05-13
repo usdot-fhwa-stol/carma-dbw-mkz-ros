@@ -1253,15 +1253,14 @@ void DbwNode::recvMiscCmd(const dbw_mkz_msgs::MiscCmd::ConstPtr& msg)
   pub_can_.publish(out);
 }
 
-bool DbwNode::publishDbwEnabled()
+bool DbwNode::publishDbwEnabled(bool force)
 {
-  bool change = false;
   bool en = enabled();
-  if (prev_enable_ != en) {
+  bool change = prev_enable_ != en;
+  if (change || force) {
     std_msgs::Bool msg;
     msg.data = en;
     pub_sys_enable_.publish(msg);
-    change = true;
   }
   prev_enable_ = en;
   return change;
@@ -1269,6 +1268,12 @@ bool DbwNode::publishDbwEnabled()
 
 void DbwNode::timerCallback(const ros::TimerEvent& event)
 {
+  // Publish status periodically, in addition to latched and on change
+  if (publishDbwEnabled(true)) {
+    ROS_WARN("DBW system enable status changed unexpectedly");
+  }
+
+  // Clear override statuses if necessary
   if (clear()) {
     can_msgs::Frame out;
     out.is_extended = false;
