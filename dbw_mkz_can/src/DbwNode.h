@@ -153,12 +153,6 @@ private:
       return ((T)0 < val) - (val < (T)0);
   }
 
-  // Sign of the wheel velocities, to be multiplied with vehicle speed
-  float speedSign() const {
-    return sgn(joint_state_.velocity[JOINT_FL]) + sgn(joint_state_.velocity[JOINT_FR]) +
-           sgn(joint_state_.velocity[JOINT_RL]) + sgn(joint_state_.velocity[JOINT_RR]) < 0 ? -1.0 : 1.0;
-  }
-
   // Licensing
   std::string vin_;
   std::string ldate_; // license date
