@@ -2,8 +2,8 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.6.0 (2022-11-30)
+------------------
 * Bump firmware versions
 * Change unsigned vehicle speed to signed vehicle velocity
 * Contributors: Kevin Hallenbeck
