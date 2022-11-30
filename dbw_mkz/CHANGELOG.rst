@@ -2,6 +2,11 @@
 Changelog for package dbw_mkz
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix ROS install key after they changed it
+* Contributors: Kevin Hallenbeck
+
 1.5.2 (2022-05-13)
 ------------------
 

@@ -2,6 +2,12 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Bump firmware versions
+* Change unsigned vehicle speed to signed vehicle velocity
+* Contributors: Kevin Hallenbeck
+
 1.5.2 (2022-05-13)
 ------------------
 * Periodically publish DBW enabled status in addition to latched and on change
