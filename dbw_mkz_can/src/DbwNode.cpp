@@ -334,7 +334,7 @@ void DbwNode::recvCAN(const can_msgs::Frame::ConstPtr& msg)
         if (msg->dlc >= sizeof(MsgSteeringReport)) {
           const MsgSteeringReport *ptr = (const MsgSteeringReport*)msg->data.elems;
           faultSteering(ptr->FLTBUS1 || ptr->FLTBUS2);
-          faultSteeringCal(ptr->FLTCAL);
+          faultSteeringCal(ptr->FLTCAL && (uint16_t)ptr->ANGLE == 0x8000);
           faultWatchdog(ptr->FLTWDC);
           dbw_mkz_msgs::SteeringReport out;
           out.header.stamp = msg->header.stamp;
@@ -388,8 +388,10 @@ void DbwNode::recvCAN(const can_msgs::Frame::ConstPtr& msg)
                 ptr->FLTBUS1 ? "true, " : "false,",
                 ptr->FLTBUS2 ? "true, " : "false,",
                 ptr->FLTPWR  ? "true" : "false");
-          } else if (ptr->FLTCAL) {
+          } else if (ptr->FLTCAL && (uint16_t)ptr->ANGLE == 0x8000) {
             ROS_WARN_THROTTLE(5.0, "Steering calibration fault. Drive at least 25 mph for at least 10 seconds in a straight line.");
+          } else if (ptr->FLTCAL) {
+            ROS_WARN_THROTTLE(5.0, "Steering configuration fault. Contact support@dataspeedinc.com if not resolved in a few minutes.");
           }
         }
         break;
