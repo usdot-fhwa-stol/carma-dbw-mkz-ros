@@ -2,6 +2,13 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Specify Python3 for scripts (no more ROS Melodic with Python2)
+* Add P702 platform (2021+ F-150)
+* Add warning for steering configuration fault
+* Contributors: Kevin Hallenbeck
+
 1.6.0 (2022-11-30)
 ------------------
 * Bump firmware versions

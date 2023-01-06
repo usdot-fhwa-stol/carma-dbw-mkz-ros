@@ -2,6 +2,9 @@
 Changelog for package dbw_mkz_joystick_demo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.6.0 (2022-11-30)
 ------------------
 
