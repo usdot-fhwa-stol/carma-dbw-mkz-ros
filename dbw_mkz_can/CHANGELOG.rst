@@ -2,6 +2,11 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Bump firmware versions
+* Contributors: Kevin Hallenbeck
+
 1.6.1 (2023-01-06)
 ------------------
 * Specify Python3 for scripts (no more ROS Melodic with Python2)
