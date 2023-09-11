@@ -2,8 +2,8 @@
 Changelog for package dbw_mkz_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.6.4 (2023-09-11)
+------------------
 * Add one-pedal-drive mode status
 * Add ready flag to GearReport message
 * Contributors: Kevin Hallenbeck
