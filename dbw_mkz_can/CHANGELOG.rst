@@ -2,6 +2,13 @@
 Changelog for package dbw_mkz_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Bump firmware versions
+* Add one-pedal-drive mode status
+* Add ready flag to GearReport message
+* Contributors: Kevin Hallenbeck
+
 1.6.3 (2023-05-10)
 ------------------
 * Bump firmware versions
