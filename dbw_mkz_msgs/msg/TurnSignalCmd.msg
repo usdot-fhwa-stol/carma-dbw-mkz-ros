@@ -1,2 +1,2 @@
 # Turn signal command enumeration
-TurnSignal cmd
+dbw_mkz_msgs/TurnSignal cmd

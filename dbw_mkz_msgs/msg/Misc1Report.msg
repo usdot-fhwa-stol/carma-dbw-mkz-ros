@@ -1,16 +1,16 @@
 std_msgs/Header header
 
 # Turn Signal enumeration
-TurnSignal turn_signal
+dbw_mkz_msgs/TurnSignal turn_signal
 
 # High beams
 bool high_beam_headlights
 
 # Front Windshield Wipers enumeration
-Wiper wiper
+dbw_mkz_msgs/Wiper wiper
 
 # Ambient Light Sensor enumeration
-AmbientLight ambient_light
+dbw_mkz_msgs/AmbientLight ambient_light
 
 # Outside air temperature
 float32 outside_temperature # Degrees Celsius

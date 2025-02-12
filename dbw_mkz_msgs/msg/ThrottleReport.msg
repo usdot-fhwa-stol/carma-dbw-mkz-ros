@@ -13,7 +13,7 @@ bool driver   # Driver activity
 bool timeout  # Command timeout
 
 # Watchdog Counter
-WatchdogCounter watchdog_counter
+dbw_mkz_msgs/WatchdogCounter watchdog_counter
 bool fault_wdc
 
 # Faults
