@@ -44,7 +44,7 @@ ament_export_dependencies(std_msgs)
 ament_export_dependencies(geometry_msgs)
 
 
-ament_auto_package()
+ament_package()
 
 include(GNUInstallDirs)
 
