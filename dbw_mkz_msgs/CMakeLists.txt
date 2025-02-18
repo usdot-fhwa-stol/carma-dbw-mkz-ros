@@ -27,7 +27,6 @@ if(DEFINED ENV{ROS_VERSION} AND $ENV{ROS_VERSION} EQUAL 1)
 endif()
 
 # ROS 2
-carma_check_ros_version(2)
 
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
@@ -50,5 +49,5 @@ ament_auto_package()
 include(GNUInstallDirs)
 
 install(FILES rule.yml
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/carma_cooperative_perception_interfaces
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/dbw_mkz_msgs
 )
