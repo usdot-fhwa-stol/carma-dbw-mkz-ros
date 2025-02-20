@@ -15,21 +15,13 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
 # Get all message files
-file(GLOB msg_files msg/*.msg)
-set(msgs)
-foreach(filePath ${msg_files})
-  get_filename_component(name ${filePath} NAME)
-  set(msgs ${msgs} msg/${name})
-endforeach(filePath)
+file(GLOB MSG_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "msg/*.msg")
 
-# Generate interfaces
-rosidl_generate_interfaces(
-    ${PROJECT_NAME}
-        ${msgs}
-    DEPENDENCIES
-        geometry_msgs
-        std_msgs
+rosidl_generate_interfaces(${PROJECT_NAME}
+  ${MSG_FILES}
+  DEPENDENCIES std_msgs geometry_msgs
 )
+
 # Export dependencies
 ament_export_dependencies(rosidl_default_runtime)
 ament_export_dependencies(std_msgs)
