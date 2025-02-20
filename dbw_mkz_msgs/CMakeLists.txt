@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(dbw_mkz_msgs)
 
-find_package(carma_cmake_common REQUIRED)
-carma_check_ros_version(1)
+if(DEFINED ENV{ROS_VERSION} AND "$ENV{ROS_VERSION}" STREQUAL "2")
+  message(STATUS "ROS2 detected. Skipping package dbw_mkz_msgs for ROS1")
+  return()
+endif()
 
 find_package(catkin REQUIRED COMPONENTS
   message_generation
