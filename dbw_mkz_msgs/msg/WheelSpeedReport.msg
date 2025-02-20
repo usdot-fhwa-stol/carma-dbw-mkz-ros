@@ -1,4 +1,4 @@
-std_msgs/Header header
+Header header
 
 # Wheel speeds (rad/s)
 float32 front_left

@@ -1,4 +1,4 @@
-Header header
+std_msgs/Header header
 
 # Wheel torques (Nm)
 float32 brake_torque_request
@@ -9,10 +9,10 @@ float32 wheel_torque_actual
 float32 accel_over_ground
 
 # Brake Pedal
-QualityFactor brake_pedal_qf
+dbw_mkz_msgs/QualityFactor brake_pedal_qf
 
 # Hill Start Assist
-HillStartAssist hsa
+dbw_mkz_msgs/HillStartAssist hsa
 
 # Anti-lock Brakes
 bool abs_active
@@ -27,7 +27,7 @@ bool trac_active
 bool trac_enabled
 
 # Parking Brake
-ParkingBrake parking_brake
+dbw_mkz_msgs/ParkingBrake parking_brake
 
 # Misc
 bool stationary

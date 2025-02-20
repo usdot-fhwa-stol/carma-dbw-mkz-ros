@@ -1,4 +1,4 @@
-Header header
+std_msgs/Header header
 
 # Throttle pedal
 # Unitless, range 0.15 to 0.80
@@ -13,7 +13,7 @@ bool driver   # Driver activity
 bool timeout  # Command timeout
 
 # Watchdog Counter
-WatchdogCounter watchdog_counter
+dbw_mkz_msgs/WatchdogCounter watchdog_counter
 bool fault_wdc
 
 # Faults
