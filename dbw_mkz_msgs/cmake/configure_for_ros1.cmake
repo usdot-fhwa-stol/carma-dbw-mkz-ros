@@ -49,3 +49,12 @@ catkin_package(
     std_msgs
     geometry_msgs
 )
+
+install(DIRECTORY bmr
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+        FILES_MATCHING PATTERN "*.bmr"
+)
+
+install(FILES rule.yml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
