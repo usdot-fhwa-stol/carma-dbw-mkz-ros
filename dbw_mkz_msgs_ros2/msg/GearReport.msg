@@ -1,13 +1,13 @@
 std_msgs/Header header
 
 # Current gear enumeration
-dbw_mkz_msgs/Gear state
+dbw_mkz_msgs_ros2/Gear state
 
 # Gear command enumeration
-dbw_mkz_msgs/Gear cmd
+dbw_mkz_msgs_ros2/Gear cmd
 
 # Gear reject enumeration
-dbw_mkz_msgs/GearReject reject
+dbw_mkz_msgs_ros2/GearReject reject
 
 # Status
 bool override
